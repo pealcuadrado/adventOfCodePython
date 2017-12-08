@@ -1,0 +1,44 @@
+class program:
+    name=None
+    size=None
+    programsAbove=[]
+
+    def __init__(self,line):
+        line=line.replace(' ','').replace('\n','')
+        part1=None
+        p1=line.split('->')
+        if len(p1) > 1:
+            self.programsAbove= p1[1].split(',')
+            part1=p1[0]
+        else:
+            part1=line
+        p2=part1.split('(')
+        self.name=p2[0]
+        self.size=int(p2[1].replace(')',''))
+
+    def printObj(self):
+        print self.name + " " + str(self.size) + " " + str(self.programsAbove)
+
+
+dataInput=[]
+with open('data') as f:
+    dataInput=f.readlines()
+
+programs=[]
+
+for line in dataInput:
+    pr=program(line)
+    programs.append(pr)
+
+end=False
+while end==False:
+    for p in programs:
+        if len(p.programsAbove)==0:
+            for pp in programs:
+                if p.name in pp.programsAbove:
+                    pp.programsAbove.remove(p.name)
+            programs.remove(p)
+    if len(programs) == 1:
+        end=True
+
+print programs[0].name
